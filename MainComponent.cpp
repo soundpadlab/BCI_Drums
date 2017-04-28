@@ -23,6 +23,9 @@
 */
 
 #include "MainComponent.h"
+#include "CustomGUIComponent.h"
+#include <string>
+
 
 //==============================================================================
 struct MidiDeviceListEntry : ReferenceCountedObject
@@ -151,7 +154,9 @@ MainContentComponent::MainContentComponent ()
       midiInputSelector (new MidiDeviceListBox ("Midi Input Selector", *this, true)),
       midiOutputSelector (new MidiDeviceListBox ("Midi Input Selector", *this, false))
 {
-    setSize (732, 520);
+	extern int GLOBAL_WINDOW_WIDTH;
+	extern int GLOBAL_WINDOW_HEIGHT;
+	setSize(GLOBAL_WINDOW_HEIGHT, GLOBAL_WINDOW_WIDTH);
 
     addLabelAndSetStyle (midiInputLabel);
     addLabelAndSetStyle (midiOutputLabel);
@@ -160,8 +165,7 @@ MainContentComponent::MainContentComponent ()
 
     midiKeyboard.setName ("MIDI Keyboard");
     addAndMakeVisible (midiKeyboard);
-	addAndMakeVisible(toggleButton = new ToggleButton("new toggle button"));
-	toggleButton->addListener(this);
+
     midiMonitor.setMultiLine (true);
     midiMonitor.setReturnKeyStartsNewLine (false);
     midiMonitor.setReadOnly (true);
@@ -177,9 +181,12 @@ MainContentComponent::MainContentComponent ()
     addAndMakeVisible (pairButton);
     pairButton.addListener (this);
     keyboardState.addListener (this);
-
+	switchStateButton.addListener(this);
     addAndMakeVisible (midiInputSelector);
     addAndMakeVisible (midiOutputSelector);
+	//Ben defined button
+	addAndMakeVisible(switchStateButton);
+	switchStateButton.setButtonText("Switch State");
 
     startTimer (500);
 }
@@ -203,11 +210,10 @@ MainContentComponent::~MainContentComponent()
     midiInputs.clear();
     midiOutputs.clear();
     keyboardState.removeListener (this);
-
+	switchStateButton.removeListener(this);
     midiInputSelector = nullptr;
     midiOutputSelector = nullptr;
     midiOutputSelector = nullptr;
-	toggleButton = nullptr;
 }
 
 //==============================================================================
@@ -220,11 +226,10 @@ void MainContentComponent::paint (Graphics& g)
 void MainContentComponent::resized()
 {
     const int margin = 10;
-	//toggleButton->setBounds(80, 40, 150, 24);
+	switchStateButton.setBounds(488, 416, 150, 24);
     midiInputLabel.setBounds (margin, margin,
                               (getWidth() / 2) - (2 * margin), 24);
-	//midiInputLabel.getBounds();
-	//Logger::outputDebugString(midiInputLabel.getBounds().toString());
+
     midiOutputLabel.setBounds ((getWidth() / 2) + margin, margin,
                                (getWidth() / 2) - (2 * margin), 24);
 
@@ -248,7 +253,6 @@ void MainContentComponent::resized()
     int y = (getHeight() / 2) + ((2 * 24) + (3 * margin) + 64);
     midiMonitor.setBounds (margin, y,
                            getWidth() - (2*margin), getHeight() - y - margin);
-	
 }
 
 //==============================================================================
@@ -258,6 +262,14 @@ void MainContentComponent::buttonClicked (Button* buttonThatWasClicked)
         RuntimePermissions::request (
             RuntimePermissions::bluetoothMidi,
             [] (bool wasGranted) { if (wasGranted) BluetoothMidiDevicePairingDialogue::open(); } );
+	if (buttonThatWasClicked == &switchStateButton) 
+	{
+		CustomGUIComponent* customGUIComponent = new CustomGUIComponent();
+		this->setVisible(false);
+		customGUIComponent->setVisible(true);
+		this->addChildComponent(customGUIComponent);
+		this->setVisible(customGUIComponent);
+	}
 }
 
 //==============================================================================
@@ -353,6 +365,20 @@ void MainContentComponent::timerCallback ()
 //==============================================================================
 void MainContentComponent::handleNoteOn (MidiKeyboardState*, int midiChannel, int midiNoteNumber, float velocity)
 {
+	
+	std::string stringNoteNumber = std::to_string(midiNoteNumber);
+	Logger::outputDebugString(stringNoteNumber);
+	midiNoteNumber = map[0];
+	//Destroying input
+	//midiNoteNumber = midiNoteNumber % 7;//7 because user can have 7 options
+	//Now I can put it in the map
+
+	//midiNoteNumber = map[midiNoteNumber];//gets the users mapping data
+
+	//midiNoteNumber += 72;//Calibrate it back to the 4th octave
+
+	//std::string stringNoteNumber2 = std::to_string(midiNoteNumber);
+	//Logger::outputDebugString(stringNoteNumber2);
     MidiMessage m (MidiMessage::noteOn (midiChannel, midiNoteNumber, velocity));
     m.setTimeStamp (Time::getMillisecondCounterHiRes() * 0.001);
     sendToOutputs (m);

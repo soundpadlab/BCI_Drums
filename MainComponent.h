@@ -28,6 +28,7 @@
 #include "JuceHeader.h"
 
 //==============================================================================
+extern int map[7];
 
 class MidiDeviceListBox;
 struct MidiDeviceListEntry;
@@ -88,10 +89,12 @@ private:
 
     ScopedPointer<MidiDeviceListBox> midiInputSelector;
     ScopedPointer<MidiDeviceListBox> midiOutputSelector;
-	ScopedPointer<ToggleButton> toggleButton;
+
     ReferenceCountedArray<MidiDeviceListEntry> midiInputs;
     ReferenceCountedArray<MidiDeviceListEntry> midiOutputs;
-
+	//Ben-defined variable
+	TextButton switchStateButton;
+	//int map[7];
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainContentComponent)
 };

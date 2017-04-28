@@ -24,6 +24,13 @@
 
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "MainComponent.h"
+#include "CustomGUIComponent.h"
+#include <map>
+
+extern int map[7];
+int map[7];
+extern std::map<std::string, int> translator;
+std::map<std::string, int> translator;
 
 //==============================================================================
 class MidiTestApplication  : public JUCEApplication
@@ -80,7 +87,41 @@ public:
                                                     DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar (true);
-            setContentOwned (new MainContentComponent(), true);
+			//inits the map
+			for (int i = 0; i < 7; i++)
+			{
+				map[i] = i;
+			}
+			//inits the translator
+			translator.insert(std::pair<std::string, int>("One Shot Pad", 1));
+			translator.insert(std::pair<std::string, int>("Shaker Pad", 2));
+			translator.insert(std::pair<std::string, int>("Tamborine Pad", 3));
+			translator.insert(std::pair<std::string, int>("Snare 1", 4));
+			translator.insert(std::pair<std::string, int>("Snare 2", 6));
+			translator.insert(std::pair<std::string, int>("Hi-Hat 1", 7));
+			translator.insert(std::pair<std::string, int>("Hi-Hat 2", 10));
+			translator.insert(std::pair<std::string, int>("Cymbal 4", 27));
+			translator.insert(std::pair<std::string, int>("Cymbal 2", 29));
+			translator.insert(std::pair<std::string, int>("Cymbal 1", 31));
+			translator.insert(std::pair<std::string, int>("Kick", 34));
+			translator.insert(std::pair<std::string, int>("Floortom 2", 41));
+			translator.insert(std::pair<std::string, int>("Raktom 3", 45));
+			translator.insert(std::pair<std::string, int>("Raktom 2", 47));
+			translator.insert(std::pair<std::string, int>("Raktom 1", 48));
+			translator.insert(std::pair<std::string, int>("Ride", 51));
+			translator.insert(std::pair<std::string, int>("Ride 2", 53));
+			translator.insert(std::pair<std::string, int>("Cymbal 3", 57));
+			translator.insert(std::pair<std::string, int>("Floortom 1", 75));
+
+
+
+
+
+
+
+
+            setContentOwned (new CustomGUIComponent(), true);
+			
 
             setResizable (true, false);
 

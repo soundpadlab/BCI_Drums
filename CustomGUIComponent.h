@@ -17,11 +17,15 @@
   ==============================================================================
 */
 
-#ifndef __JUCE_HEADER_1294C21E0E0D42F2__
-#define __JUCE_HEADER_1294C21E0E0D42F2__
+#ifndef __JUCE_HEADER_C158D961EF0A43A6__
+#define __JUCE_HEADER_C158D961EF0A43A6__
 
 //[Headers]     -- You can add your own extra header files here --
 #include "../JuceLibraryCode/JuceHeader.h"
+#include <map>
+extern int map[7];
+
+extern std::map<std::string, int> translator;
 //[/Headers]
 
 
@@ -34,12 +38,14 @@
     Describe your class and how it works here!
                                                                     //[/Comments]
 */
-class MyTabbedComponent  : public Component
+class CustomGUIComponent  : public Component,
+                            public ComboBoxListener,
+                            public ButtonListener
 {
 public:
     //==============================================================================
-    MyTabbedComponent ();
-    ~MyTabbedComponent();
+    CustomGUIComponent ();
+    ~CustomGUIComponent();
 
     //==============================================================================
     //[UserMethods]     -- You can add your own custom methods in this section.
@@ -47,22 +53,40 @@ public:
 
     void paint (Graphics& g) override;
     void resized() override;
+    void comboBoxChanged (ComboBox* comboBoxThatHasChanged) override;
+    void buttonClicked (Button* buttonThatWasClicked) override;
 
 
 
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
+	//int map[7];
+	//std::map<std::string, int> translator;
     //[/UserVariables]
 
     //==============================================================================
-    ScopedPointer<TabbedComponent> tabbedComponent;
+    ScopedPointer<ComboBox> comboBox;
+    ScopedPointer<Label> label;
+    ScopedPointer<Label> label2;
+    ScopedPointer<ComboBox> comboBox2;
+    ScopedPointer<Label> label3;
+    ScopedPointer<ComboBox> comboBox3;
+    ScopedPointer<Label> label4;
+    ScopedPointer<ComboBox> comboBox4;
+    ScopedPointer<Label> label5;
+    ScopedPointer<ComboBox> comboBox5;
+    ScopedPointer<Label> label6;
+    ScopedPointer<Label> label7;
+    ScopedPointer<ComboBox> comboBox6;
+    ScopedPointer<ComboBox> comboBox7;
+    ScopedPointer<TextButton> switchStateButton;
 
 
     //==============================================================================
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MyTabbedComponent)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CustomGUIComponent)
 };
 
 //[EndFile] You can add extra defines here...
 //[/EndFile]
 
-#endif   // __JUCE_HEADER_1294C21E0E0D42F2__
+#endif   // __JUCE_HEADER_C158D961EF0A43A6__
