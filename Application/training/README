@@ -1,0 +1,9 @@
+Procedure to conduct training:
+
+1. Open 'training.m' in matlab
+2. A window should pop up. Make appropriate selection from the dropdown menu (e.g smile, clench, etc)
+3. click 'start'
+4. Make the facial expression
+5. After pre-set recording duration (default=5seconds), the recording will stop and a message 'saved' will appear on the window
+6. Check the folder 'training/data/' for all the recordings
+7. You can change the pre-set recording duration by changing the value of variable 'timeSlice' in 'trainingModule.m'
