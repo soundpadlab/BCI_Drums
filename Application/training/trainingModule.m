@@ -11,7 +11,7 @@ dataToSave = [];
 time = 0;
 
 %Start broadcasting server
-!python acquisition_server.py &
+!python acquisition_server_old.py &
 
 %Listen to broadcasting server
 hudpr = dsp.UDPReceiver('LocalIPPort',8888,'MessageDataType','int8');
@@ -44,7 +44,7 @@ headers = {'Time', 'Alpha', 'Beta_Low', 'Beta_High', 'Theta', 'Gamma'};
 dataToSave = [headers; num2cell(dataToSave)];
 
 filename = strcat(strcat(get(handles.action, 'UserData'),'-'),strcat(datestr(datetime),'.mat'));
-filename = strcat('data/c', filename);
+filename = strcat('data/', filename);
 save(filename, 'dataToSave');
 set (handles.status, 'String', 'saved');
 
