@@ -1,17 +1,20 @@
-function trainingModule(handles)
+function dataToSave = trainingModule(handles)
 timeSlice = 5;
 
+persistent smileData;
+persistent clenchData;
+
+dataToSave = [];
 thetaArr = [];
 alphaArr = [];
 bLowArr = [];
 bHighArr = [];
 gammaArr = [];
 timeArr = [];
-dataToSave = [];
 time = 0;
 
 %Start broadcasting server
-!python acquisition_server_old.py &
+%!python acquisition_server_old.py &
 
 %Listen to broadcasting server
 hudpr = dsp.UDPReceiver('LocalIPPort',8888,'MessageDataType','int8');
@@ -43,9 +46,16 @@ end
 headers = {'Time', 'Alpha', 'Beta_Low', 'Beta_High', 'Theta', 'Gamma'};
 dataToSave = [headers; num2cell(dataToSave)];
 
-filename = strcat(strcat(get(handles.action, 'UserData'),'-'),strcat(datestr(datetime),'.mat'));
-filename = strcat('data/', filename);
-save(filename, 'dataToSave');
-set (handles.status, 'String', 'saved');
+switch get(handles.action, 'UserData')
+    case 'Smile'
+        smileData = cat(3, smileData, dataToSave);
+        dataToSave = smileData;
+end
 
-!taskkill /im cmd.exe
+% 
+% filename = strcat(strcat(get(handles.action, 'UserData'),'-'),strcat(datestr(datetime),'.mat'));
+% filename = strcat('data/', filename);
+% save(filename, 'dataToSave');
+% set (handles.status, 'String', 'saved');
+% 
+% !taskkill /im cmd.exe

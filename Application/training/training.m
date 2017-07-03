@@ -22,7 +22,7 @@ function varargout = training(varargin)
 
 % Edit the above text to modify the response to help training
 
-% Last Modified by GUIDE v2.5 28-Apr-2017 15:24:58
+% Last Modified by GUIDE v2.5 02-Jul-2017 20:40:27
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -42,7 +42,11 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
-
+global smileData;
+global clenchData;
+% 
+% smileData = [];
+% clenchData = [];
 
 % --- Executes just before training is made visible.
 function training_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -91,9 +95,12 @@ function action_CreateFcn(hObject, eventdata, handles)
 
 % Hint: listbox controls usually have a white background on Windows.
 %       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','black');
-end
+%if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+%    set(hObject,'BackgroundColor','black');
+%end
+
+%Start broadcasting server
+!python acquisition_server_old.py &
 
 
 % --- Executes on button press in recordSwitch.
@@ -101,17 +108,69 @@ function recordSwitch_Callback(hObject, eventdata, handles)
 % hObject    handle to recordSwitch (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global smileData;
+global clenchData;
+persistent furrowData;
+persistent browData;
+persistent blinkData;
+
 switch get(handles.action, 'Value')
     case 1
         userData = 'Smile';
+        set (handles.action, 'UserData', userData);
+        smileData = trainingModule(handles);
+%         smileData = cat(3, smileData, tmpData);
+%         smileData
     case 2
         userData = 'Clench';
+        set (handles.action, 'UserData', userData);
+        tmpData = trainingModule(handles);
+        clenchData = cat(3, clenchData, tmpData);
     case 3
         userData = 'Furrow';
+        set (handles.action, 'UserData', userData);
+        tmpData = trainingModule(handles);
+        furrowData = cat(3, furrowData, tmpData);
     case 4
         userData = 'Eyebrow-raise';
+        set (handles.action, 'UserData', userData);
+        tmpData = trainingModule(handles);
+        browData = cat(3, browData, tmpData);
     case 5
         userData = 'Blink';
+        set (handles.action, 'UserData', userData);
+        tmpData = trainingModule(handles);
+        blinkData = cat(3, blinkData, tmpData);
 end
-set (handles.action, 'UserData', userData);
-trainingModule(handles);
+
+
+% --- Executes on button press in saveExit.
+function saveExit_Callback(hObject, eventdata, handles)
+% hObject    handle to saveExit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global smileData;
+global clenchData;
+% headers = {'Time', 'Alpha', 'Beta_Low', 'Beta_High', 'Theta', 'Gamma'};
+% 
+% smileData = [headers; num2cell(smileData)];
+
+if ~isempty(smileData)
+    x = smileData;
+    filename = strcat('smile-',strcat(datestr(datetime),'.mat'));
+    filename = strcat('data/', filename);
+    x
+    save(filename, 'x');
+else
+    'haha'
+end
+% clenchData = [headers; num2cell(clenchData)];
+filename = strcat('clench-',strcat(datestr(datetime),'.mat'));
+filename = strcat('data/', filename);
+save(filename, 'clenchData');
+
+
+set (handles.status, 'String', 'saved');
+
+!killall python
+%!taskkill /im cmd.exe
