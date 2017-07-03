@@ -1,8 +1,7 @@
 function dataToSave = trainingModule(handles)
 timeSlice = 5;
 
-persistent smileData;
-persistent clenchData;
+persistent smileData clenchData furrowData browData blinkData;
 
 dataToSave = [];
 thetaArr = [];
@@ -50,6 +49,22 @@ switch get(handles.action, 'UserData')
     case 'Smile'
         smileData = cat(3, smileData, dataToSave);
         dataToSave = smileData;
+        
+    case 'Clench'
+        clenchData = cat(3, clenchData, dataToSave);
+        dataToSave = clenchData;
+
+    case 'Furrow'
+        furrowData = cat(3, furrowData, dataToSave);
+        dataToSave = furrowData;
+
+    case 'Brow'
+        browData = cat(3, browData, dataToSave);
+        dataToSave = browData;
+
+    case 'Blink'
+        blinkData = cat(3, blinkData, dataToSave);
+        dataToSave = blinkData;
 end
 
 % 
