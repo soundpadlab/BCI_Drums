@@ -108,25 +108,18 @@ global smileData clenchData furrowData browData blinkData;
 set(handles.recordSwitch, 'Enable', 'off');
 set(handles.recordSwitch, 'String', 'recording..');
 
-%display timer
-% stat=true;
-% t = timer('TimerFcn', 'stat=false; disp(''Timer!'')',... 
-%                  'StartDelay',3);
-% start(t)
 
-i = 3;
-while(i>0)
-  disp(int2str(i));
-  set (handles.status, 'String', strcat('recording begins in: ',int2str(i)));
+
+
+t = timer('TimerFcn', 'stat=false; disp(''Timer!'')',... 
+                 'StartDelay',10);
+start(t)
+
+stat=true;
+while(stat==true)
+  set (handles.status, 'String', strcat('recording begins in',));
   pause(1)
-  i = i - 1;
-  if (i==0)
-      set (handles.status, 'String', 'GO!!!');
-      break;
-  end
 end
-
-% delete(t);
 
 switch get(handles.action, 'Value')
     case 1
@@ -136,28 +129,23 @@ switch get(handles.action, 'Value')
     case 2
         userData = 'Clench';
         set (handles.action, 'UserData', userData);
-        set (handles.status, 'String', strcat(userData,' now'));
         clenchData = trainingModule(handles);
     case 3
         userData = 'Furrow';
         set (handles.action, 'UserData', userData);
-        set (handles.status, 'String', strcat('Furrow eyebrows',' now'));
         furrowData = trainingModule(handles);
     case 4
         userData = 'Brow';
         set (handles.action, 'UserData', userData);
-        set (handles.status, 'String', strcat('Raise eyebrows',' now'));
         browData = trainingModule(handles);
     case 5
         userData = 'Blink';
         set (handles.action, 'UserData', userData);
-        set (handles.status, 'String', strcat(userData,' now'));
         blinkData = trainingModule(handles);
 end
 
 set(handles.recordSwitch, 'Enable', 'on');
 set(handles.recordSwitch, 'String', 'record');
-set (handles.status, 'String', 'recorded!');
 
 
 % --- Executes on button press in saveExit.
