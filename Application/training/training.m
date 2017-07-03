@@ -96,7 +96,7 @@ function action_CreateFcn(hObject, eventdata, handles)
 %end
 
 %Start broadcasting server
-!python acquisition_server_old.py &
+!python acquisition_server.py &
 
 
 % --- Executes on button press in recordSwitch.
@@ -208,6 +208,6 @@ end
 
 set (handles.status, 'String', 'saved');
 
-!killall python
-%!taskkill /im cmd.exe
-%.close(handles);
+%!killall python
+!taskkill /im cmd.exe
+%close(handles);
