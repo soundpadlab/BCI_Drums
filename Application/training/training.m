@@ -179,28 +179,28 @@ end
 
 %clench
 if ~isempty(clenchData)
-    filename = strcat('smile-',strcat(datestr(datetime),'.mat'));
+    filename = strcat('clench-',strcat(datestr(datetime),'.mat'));
     filename = strcat('data/', filename);
     save(filename, 'clenchData');
 end
 
 %furrow
 if ~isempty(furrowData)
-    filename = strcat('smile-',strcat(datestr(datetime),'.mat'));
+    filename = strcat('furrow-',strcat(datestr(datetime),'.mat'));
     filename = strcat('data/', filename);
     save(filename, 'furrowData');
 end
 
 %brow
 if ~isempty(browData)
-    filename = strcat('smile-',strcat(datestr(datetime),'.mat'));
+    filename = strcat('brow-',strcat(datestr(datetime),'.mat'));
     filename = strcat('data/', filename);
     save(filename, 'browData');
 end
 
 %blink
 if ~isempty(blinkData)
-    filename = strcat('smile-',strcat(datestr(datetime),'.mat'));
+    filename = strcat('blink-',strcat(datestr(datetime),'.mat'));
     filename = strcat('data/', filename);
     save(filename, 'blinkData');
 end
@@ -210,3 +210,4 @@ set (handles.status, 'String', 'saved');
 
 !killall python
 %!taskkill /im cmd.exe
+%.close(handles);
