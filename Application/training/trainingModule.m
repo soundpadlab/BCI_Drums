@@ -1,4 +1,4 @@
-function dataToSave = trainingModule(handles)
+function dataToSend = trainingModule(handles)
 persistent smileData clenchData furrowData browData blinkData;
 
 timeSlice = 5;
@@ -44,15 +44,16 @@ while exist('_trigger','file') == 2
     pause on;
     set(handles.status, 'String', '..');
     pause(3);
-    pause off;
-    set(handles.status, 'String', strcat(userData,' once now!'));
+    
     
 %     'HUHA!'
     tic;
-    while (toc<=timeSlice)
+    while (toc<=timeSlice) && (exist('_trigger','file') == 2)
         raw = char(step(hudpr)');
         data = strsplit(raw, ' ');
-   
+        set(handles.status, 'String', strcat(userData,' once now!'));
+        pause(0.01);
+        pause off;
         if (length(data) == 87)
             time = toc;
             dataToSave = [dataToSave; str2double(data{1}) str2double(data{2}) str2double(data{3})...
@@ -75,95 +76,85 @@ while exist('_trigger','file') == 2
     %headers = {'Counter', 'System Time', 'Emotiv Engine Time', '1-EEG', '1-Alpha', '1-Beta_Low', '1-Beta_High', '1-Theta', '1-Gamma', '2-EEG', '2-Alpha', '2-Beta_Low', '2-Beta_High', '2-Theta', '2-Gamma', '3-EEG', '3-Alpha', '3-Beta_Low', '3-Beta_High', '3-Theta', '3-Gamma', '4-EEG', '4-Alpha', '4-Beta_Low', '4-Beta_High', '4-Theta', '4-Gamma', '5-EEG', '5-Alpha', '5-Beta_Low', '5-Beta_High', '5-Theta', '5-Gamma', '5-EEG', '6-Alpha', '6-Beta_Low', '6-Beta_High', '6-Theta', '6-Gamma', '7-EEG', '7-Alpha', '7-Beta_Low', '7-Beta_High', '7-Theta', '7-Gamma', '8-EEG', '8-Alpha', '8-Beta_Low', '8-Beta_High', '8-Theta', '8-Gamma', '9-EEG', '9-Alpha', '9-Beta_Low', '9-Beta_High', '9-Theta', '9-Gamma', '10-EEG', '10-Alpha', '10-Beta_Low', '10-Beta_High', '10-Theta', '10-Gamma', '11-EEG', '11-Alpha', '11-Beta_Low', '11-Beta_High', '11-Theta', '11-Gamma', '12-EEG', '12-Alpha', '12-Beta_Low', '12-Beta_High', '12-Theta', '12-Gamma', '13-EEG', '13-Alpha', '13-Beta_Low', '13-Beta_High', '13-Theta', '13-Gamma', '14-EEG', '14-Alpha', '14-Beta_Low', '14-Beta_High', '14-Theta', '14-Gamma'};
     %dataToSave = [headers; num2cell(dataToSave)];
 
-    switch userData
-        case 'Smile'
-            x = size(dataToSave);
-            y = size(smileData);
-            if (y(1) ~= 0)
-                if (x(1)>y(1))
-                   smileData = padarray(smileData, [x(1)-y(1)], 0, 'post'); 
-                else
-                    if (y(1)>x(1))
-                        dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+    if (exist('_trigger','file') == 2)
+        switch userData
+            case 'Smile'
+                disp('in smile');
+                x = size(dataToSave);
+                y = size(smileData);
+                if (y(1) ~= 0)
+                    if (x(1)>y(1))
+                       smileData = padarray(smileData, [x(1)-y(1)], 0, 'post'); 
+                    else
+                        if (y(1)>x(1))
+                            dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+                        end
                     end
                 end
-            end
-            smileData = cat(3, smileData, dataToSave);
-            dataToSave = smileData;
+                smileData = cat(3, smileData, dataToSave);
+                dataToSend = smileData;
+                size(smileData)
 
-        case 'Clench'
-            x = size(dataToSave);
-            y = size(clenchData);
-            if (y(1) ~= 0)
-                if (x(1)>y(1))
-                   clenchData = padarray(clenchData, [x(1)-y(1)], 0, 'post'); 
-                else
-                    if (y(1)>x(1))
-                        dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+            case 'Clench'
+                disp('in clench');
+                x = size(dataToSave);
+                y = size(clenchData);
+                if (y(1) ~= 0)
+                    if (x(1)>y(1))
+                       clenchData = padarray(clenchData, [x(1)-y(1)], 0, 'post'); 
+                    else
+                        if (y(1)>x(1))
+                            dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+                        end
                     end
                 end
-            end
-            clenchData = cat(3, clenchData, dataToSave);
-            dataToSave = clenchData;
+                clenchData = cat(3, clenchData, dataToSave);
+                dataToSend = clenchData;
 
-        case 'Furrow'
-            x = size(dataToSave);
-            y = size(furrowData);
-            if (y(1) ~= 0)
-                if (x(1)>y(1))
-                   furrowData = padarray(furrowData, [x(1)-y(1)], 0, 'post'); 
-                else
-                    if (y(1)>x(1))
-                        dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+            case 'Furrow'
+                x = size(dataToSave);
+                y = size(furrowData);
+                if (y(1) ~= 0)
+                    if (x(1)>y(1))
+                       furrowData = padarray(furrowData, [x(1)-y(1)], 0, 'post'); 
+                    else
+                        if (y(1)>x(1))
+                            dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+                        end
                     end
                 end
-            end
-            furrowData = cat(3, furrowData, dataToSave);
-            dataToSave = furrowData;
+                furrowData = cat(3, furrowData, dataToSave);
+                dataToSend = furrowData;
 
-        case 'Brow'
-            x = size(dataToSave);
-            y = size(browData);
-            if (y(1) ~= 0)
-                if (x(1)>y(1))
-                   browData = padarray(browData, [x(1)-y(1)], 0, 'post'); 
-                else
-                    if (y(1)>x(1))
-                        dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+            case 'Brow'
+                x = size(dataToSave);
+                y = size(browData);
+                if (y(1) ~= 0)
+                    if (x(1)>y(1))
+                       browData = padarray(browData, [x(1)-y(1)], 0, 'post'); 
+                    else
+                        if (y(1)>x(1))
+                            dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+                        end
                     end
                 end
-            end
-            browData = cat(3, browData, dataToSave);
-            dataToSave = browData;
+                browData = cat(3, browData, dataToSave);
+                dataToSend = browData;
 
-        case 'Blink'
-            x = size(dataToSave);
-            y = size(blinkData);
-            if (y(1) ~= 0)
-                if (x(1)>y(1))
-                   blinkData = padarray(blinkData, [x(1)-y(1)], 0, 'post'); 
-                else
-                    if (y(1)>x(1))
-                        dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+            case 'Blink'
+                x = size(dataToSave);
+                y = size(blinkData);
+                if (y(1) ~= 0)
+                    if (x(1)>y(1))
+                       blinkData = padarray(blinkData, [x(1)-y(1)], 0, 'post'); 
+                    else
+                        if (y(1)>x(1))
+                            dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+                        end
                     end
                 end
-            end
-            blinkData = cat(3, blinkData, dataToSave);
-            dataToSave = blinkData;
+                blinkData = cat(3, blinkData, dataToSave);
+                dataToSend = blinkData;
+        end
     end
 end
-
-function displayCountdown(handles, userData)
-    t = timer('TimerFcn', 'stat=false; set(handles.status, ''String'', strcat(userData,'' ONCE NOW!''));',... 
-                     'StartDelay',3);
-    start(t)
-
-    stat=true;
-    i = 4;
-    while(stat==true)
-      i = i-1;
-%       disp(int2str(i));
-      set(handles.status, 'String', strcat(userData,' in :', int2str(i)))
-      pause(1)
-    end
-    delete(t);

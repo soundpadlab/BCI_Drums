@@ -135,6 +135,7 @@ if (strcmp(button_state, 'Start')==1)
 else
     delete('_trigger');
     set(handles.recordSwitch, 'String', 'Start');
+    set (handles.status, 'String', '');
 end
 
 
