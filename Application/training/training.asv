@@ -107,7 +107,7 @@ function recordSwitch_Callback(hObject, eventdata, handles)
 global smileData clenchData furrowData browData blinkData;
 
 button_state = get(hObject,'String');
-if (strcmp(button_state, 'Start')==1)
+if (strcmp(button_state, 'Start')
 	fclose(fopen('_trigger', 'w'));
     set(handles.recordSwitch, 'String', 'Stop');
     switch get(handles.action, 'Value')

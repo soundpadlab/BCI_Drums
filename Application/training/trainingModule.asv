@@ -25,27 +25,22 @@ while exist('_trigger','file') == 2
 %     displayCountdown(handles, userData);
 
 %     'ha!'
-    
+    set(handles.status, 'String', '..');
 %     t = timer('TimerFcn', 'stat=false; disp(''yoooooo'');','StartDelay',3);
 %     start(t)
 %     stat=true;
-%     i = 4;
-%     while(i>1)
-% %       disp('yoo');
-%       i = i-1;
-% %       set(handles.status, 'String', strcat(userData,' in :', int2str(i)));
-%       pause(1)
-% %       if (i == 1)
-% %           set(handles.status, 'String', strcat(userData,' once now!'));
-% %       end
-%     end
-% %     'hu!'
-% %     stop(t);
-    pause on;
-    set(handles.status, 'String', '..');
-    pause(3);
-    pause off;
-    set(handles.status, 'String', strcat(userData,' once now!'));
+    i = 4;
+    while(i>1)
+%       disp('yoo');
+      i = i-1;
+%       set(handles.status, 'String', strcat(userData,' in :', int2str(i)));
+      pause(1)
+%       if (i == 1)
+%           set(handles.status, 'String', strcat(userData,' once now!'));
+%       end
+    end
+%     'hu!'
+%     stop(t);
     
 %     'HUHA!'
     tic;
