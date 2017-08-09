@@ -211,8 +211,15 @@ function [] = gVisualize (handles)
     for i = 1:length(params)
         
         plotData = squeeze(dataToPlot(:,sensor+params(i)-1,:));
-        
-        ax1 = subplot(2,ceil(length(params)/2),i,'Parent', p);
+        factor = length(params);
+        if (factor<=3)
+            factor1 = 1;
+            factor2 = factor;
+        else
+            factor1 = ceil(factor/3);
+            factor2 = ceil(factor/2);
+        end
+        ax1 = subplot(factor2,factor1,i,'Parent', p);
         plot(ax1,t,plotData);
         maxY = ceil(max(max(plotData)));
         switch params(i)
@@ -227,7 +234,7 @@ function [] = gVisualize (handles)
                 plotName = 'Beta-High';
             case 5
                 plotName = 'Theta';
-                ylim([maxY-10000 maxY+10]);
+                ylim([maxY-50000 maxY+10]);
             case 6
                 plotName = 'Gamma';
         end
