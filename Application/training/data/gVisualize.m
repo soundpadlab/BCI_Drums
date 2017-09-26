@@ -3,7 +3,7 @@ function [] = gVisualize (handles)
     userData = get(handles.selectAction,'Value');
     trialsFrom = str2num(get(handles.trialsFrom,'String'));
     trialsTo = str2num(get(handles.trialsTo,'String'));
-    sensor = get(handles.sensorSelect,'Value');
+    sensors = get(handles.sensorSelect,'Value');
     params = get(handles.dataSelect,'Value');
     
     switch userData
@@ -19,50 +19,7 @@ function [] = gVisualize (handles)
             userData = 'Furrow';
     end
     
-    switch sensor
-        case 1
-            sensor = 4;
-            sensorName = 'AF3';
-        case 2
-            sensor = 10;
-            sensorName = 'F7';
-        case 3
-            sensor = 16;
-            sensorName = 'F3';
-        case 4
-            sensor = 22;
-            sensorName = 'FC5';
-        case 5
-            sensor = 28;
-            sensorName = 'T7';
-        case 6
-            sensor = 34;
-            sensorName = 'P7';
-        case 7
-            sensor = 40;
-            sensorName = 'O1';
-        case 8
-            sensor = 46;
-            sensorName = 'O2';
-        case 9
-            sensor = 52;
-            sensorName = 'P8';
-        case 10
-            sensor = 58;
-            sensorName = 'T8';
-        case 11
-            sensor = 64;
-            sensorName = 'FC6';
-        case 12
-            sensor = 70;
-            sensorName = 'F4';
-        case 13
-            sensor = 76;
-            sensorName = 'F8';
-        case 14
-            sensor = 82;
-            sensorName = 'AF4';
-    end
+   
     
     dataToPlot = zeros(0,87,0);
 %     userData = 'Smile';
@@ -197,7 +154,53 @@ function [] = gVisualize (handles)
     
 %     size(dataToPlot)
     
-
+for j = 1:length(sensors)
+    sensor = sensors(j);
+     switch sensor
+        case 1
+            sensor = 4;
+            sensorName = 'AF3';
+        case 2
+            sensor = 10;
+            sensorName = 'F7';
+        case 3
+            sensor = 16;
+            sensorName = 'F3';
+        case 4
+            sensor = 22;
+            sensorName = 'FC5';
+        case 5
+            sensor = 28;
+            sensorName = 'T7';
+        case 6
+            sensor = 34;
+            sensorName = 'P7';
+        case 7
+            sensor = 40;
+            sensorName = 'O1';
+        case 8
+            sensor = 46;
+            sensorName = 'O2';
+        case 9
+            sensor = 52;
+            sensorName = 'P8';
+        case 10
+            sensor = 58;
+            sensorName = 'T8';
+        case 11
+            sensor = 64;
+            sensorName = 'FC6';
+        case 12
+            sensor = 70;
+            sensorName = 'F4';
+        case 13
+            sensor = 76;
+            sensorName = 'F8';
+        case 14
+            sensor = 82;
+            sensorName = 'AF4';
+     end
+    
     f = figure;
     p = uipanel('Parent',f,'BorderType','none'); 
     p.Title = strcat(sensorName,' - ',userData); 
@@ -246,6 +249,6 @@ function [] = gVisualize (handles)
 %         ylim([4000 4400])
 
     end
-            
+end      
     
 end
