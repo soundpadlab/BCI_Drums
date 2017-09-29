@@ -206,5 +206,5 @@ set (handles.status, 'String', 'saved');
 
 %!killall python
 !taskkill /im cmd.exe
-%quit;
+quit;
 %close(handles);
