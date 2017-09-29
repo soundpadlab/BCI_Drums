@@ -1,5 +1,5 @@
 function dataToSend = trainingModule(handles)
-persistent smileData clenchData furrowData browData blinkData;
+persistent smileData clenchData furrowData browData blinkData nothingData;
 
 timeSlice = 5;
 
@@ -155,6 +155,23 @@ while exist('_trigger','file') == 2
                 end
                 blinkData = cat(3, blinkData, dataToSave);
                 dataToSend = blinkData;
+                
+            %capture data doing nothing
+            case 'Nothing'
+                x = size(dataToSave);
+                y = size(nothingData);
+                if (y(1) ~= 0)
+                    if (x(1)>y(1))
+                       nothingData = padarray(nothingData, [x(1)-y(1)], 0, 'post'); 
+                    else
+                        if (y(1)>x(1))
+                            dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
+                        end
+                    end
+                end
+                nothingData = cat(3, nothingData, dataToSave);
+                dataToSend = nothingData;
+                size(nothingData)
         end
     end
 end
