@@ -197,6 +197,10 @@ if ~isempty(nothingData)
     filename = strcat('data/', filename);
     save(filename, 'nothingData');
 end
+<<<<<<< HEAD
+=======
+
+>>>>>>> c681d11e6e7b8a4add662b4652d85005425e2549
 
 set (handles.status, 'String', 'saved');
 

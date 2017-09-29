@@ -171,7 +171,10 @@ while exist('_trigger','file') == 2
                 end
                 nothingData = cat(3, nothingData, dataToSave);
                 dataToSend = nothingData;
+<<<<<<< HEAD
                 size(nothingData)
+=======
+>>>>>>> c681d11e6e7b8a4add662b4652d85005425e2549
         end
     end
 end
