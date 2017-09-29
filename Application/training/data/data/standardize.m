@@ -161,7 +161,44 @@ function [] = standardize()
     finalData5 = [C5 c];
     
 
+    % doing nothing
+%     dataToPlot = zeros(0,87,0);
+%     
+%     
+%     disp('in nothing');
+%     files = dir('nothing*');
+%     fileIndex = find(~[files.isdir]);
+%     for i = 1:length(fileIndex)
+%         fileName = files(fileIndex(i)).name;
+%         load(fileName);
+%         x = size(dataToPlot);
+%         y = size(nothingData);
+%         if (y(1) ~= 0)
+%             if (x(1)>y(1))
+%                nothingData = padarray(nothingData, [x(1)-y(1)], 0, 'post'); 
+%             else
+%                 if (y(1)>x(1))
+%                     dataToPlot = padarray(dataToPlot, [y(1)-x(1)], 0, 'post');
+%                 end
+%             end
+%         end
+%         dataToPlot = cat(3, dataToPlot, nothingData);
+%         %dataToSend = blinkData;
+% %                 size(dataToPlot)
+% 
+%     end
+% 
+%      size(dataToPlot)
+%     dataToPlot = max(dataToPlot);
+%     C6 = permute(dataToPlot, [1 3 2]);
+%     C6 = reshape(C6,[],size(dataToPlot,2),1);
+%     c = ones(size(C6,1),1)*0;
+%     finalData6 = [C6 c];
+%     
+
+    
     fd = [finalData;finalData2;finalData3;finalData4;finalData5];
+    %fd = [finalData;finalData2;finalData3;finalData4;finalData5;finalData6];
     
     fd = fd(:,4:end);
     size(fd)

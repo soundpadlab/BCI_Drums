@@ -42,7 +42,7 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
-global smileData clenchData furrowData browData blinkData;
+global smileData clenchData furrowData browData blinkData nothingData;
 
 % --- Executes just before training is made visible.
 function training_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -104,7 +104,7 @@ function recordSwitch_Callback(hObject, eventdata, handles)
 % hObject    handle to recordSwitch (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global smileData clenchData furrowData browData blinkData;
+global smileData clenchData furrowData browData blinkData nothingData;
 
 button_state = get(hObject,'String');
 if (strcmp(button_state, 'Start')==1)
@@ -131,6 +131,10 @@ if (strcmp(button_state, 'Start')==1)
             userData = 'Blink';
             set (handles.action, 'UserData', userData);
             blinkData = trainingModule(handles);
+        case 6
+            userData = 'Nothing';
+            set (handles.action, 'UserData', userData);
+            nothingData = trainingModule(handles);
     end
 else
     delete('_trigger');
@@ -144,7 +148,7 @@ function saveExit_Callback(hObject, eventdata, handles)
 % hObject    handle to saveExit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global smileData clenchData furrowData browData blinkData;
+global smileData clenchData furrowData browData blinkData nothingData;
 
 % headers = {'Time', 'Alpha', 'Beta_Low', 'Beta_High', 'Theta', 'Gamma'};
 % 
@@ -185,6 +189,13 @@ if ~isempty(blinkData)
     filename = strcat('blink-',timeLabel);
     filename = strcat('data/', filename);
     save(filename, 'blinkData');
+end
+
+%nothing
+if ~isempty(nothingData)
+    filename = strcat('nothing-',timeLabel);
+    filename = strcat('data/', filename);
+    save(filename, 'nothingData');
 end
 
 
