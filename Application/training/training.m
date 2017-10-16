@@ -132,7 +132,7 @@ if (strcmp(button_state, 'Start')==1)
             set (handles.action, 'UserData', userData);
             blinkData = trainingModule(handles);
         case 6
-            userData = 'Nothing';
+            userData = 'Relax';
             set (handles.action, 'UserData', userData);
             nothingData = trainingModule(handles);
     end
@@ -197,14 +197,10 @@ if ~isempty(nothingData)
     filename = strcat('data/', filename);
     save(filename, 'nothingData');
 end
-<<<<<<< HEAD
-=======
-
->>>>>>> c681d11e6e7b8a4add662b4652d85005425e2549
 
 set (handles.status, 'String', 'saved');
 
 %!killall python
 !taskkill /im cmd.exe
-quit;
+% quit;
 %close(handles);

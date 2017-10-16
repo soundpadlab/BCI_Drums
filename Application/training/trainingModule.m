@@ -51,7 +51,11 @@ while exist('_trigger','file') == 2
     while (toc<=timeSlice) && (exist('_trigger','file') == 2)
         raw = char(step(hudpr)');
         data = strsplit(raw, ' ');
-        set(handles.status, 'String', strcat(userData,' once now!'));
+%         if (userData ~= 'Nothing')
+            set(handles.status, 'String', strcat(userData,' now!'));
+%         else 
+%             set(handles.status, 'String', ' Relax! Do nothing!');
+%         end
         pause(0.01);
         pause off;
         if (length(data) == 87)
@@ -171,10 +175,8 @@ while exist('_trigger','file') == 2
                 end
                 nothingData = cat(3, nothingData, dataToSave);
                 dataToSend = nothingData;
-<<<<<<< HEAD
+
                 size(nothingData)
-=======
->>>>>>> c681d11e6e7b8a4add662b4652d85005425e2549
         end
     end
 end
