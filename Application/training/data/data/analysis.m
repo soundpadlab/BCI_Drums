@@ -1,5 +1,5 @@
 clc;clear;
-disp('start');
+disp("start");
 
 load('collatedData_filtered');
 
@@ -37,7 +37,7 @@ actions=fd(:,end)./100000;
 
 s1='AF3';s2='F7';s3='F3';s4='FC5';s5='T7';s6='P7';
 s7='O1';s8='O2';s9='P8';s10='T8';s11='FC6';s12='F4';s13='F8';s14='AF4';
-ids=['s1' 's2' 's3' 's4' 's5' 's6' 's7' 's8' 's9' 's10' 's11' 's12' 's13' 's14'];
+ids=["s1" "s2" "s3" "s4" "s5" "s6" "s7" "s8" "s9" "s10" "s11" "s12" "s13" "s14"];
 ids_num=[1:14];
 sensors_w_id=struct(char(ids(1)),AF3(:,1:6),char(ids(2)),F7(:,1:6),char(ids(3)),F3(:,1:6),...
     char(ids(4)),FC5(:,1:6),char(ids(5)),T7(:,1:6),char(ids(6)),P7(:,1:6),...
@@ -67,7 +67,7 @@ handles.actions=actions;
 
 
 clustering_analysis([1 3 12 14],handles);
-clustering_analysis([1:14],handles);
+clustering_analysis(1:14,handles);
 
 
 
@@ -82,40 +82,39 @@ sensors_w_id=handles.sensors_w_id;
 ids=handles.ids;
 actions=handles.actions;
 %{
-%%%%%%%% Analysis by Each band%%%%%%%%%%%%%%%
+%%%%%%% Analysis by Each band%%%%%%%%%%%%%%%
 based on the given sensors, analysis each signal bands through clustering
 %}
-% single band, from 1 to 6 is EEG, Alpha, Beta-low, Beta-high, Theta, Gamma
-clusters_c=[];
-clusters_eusq=[];
-euclidean_sq_silhouette_mean=[];
-city_silhouette_mean=[];
-data=[];
+%single band, from 1 to 6 is EEG, Alpha, Beta-low, Beta-high, Theta, Gamma
+clusters_city_by_band=[];
+clusters_eusq_by_band=[];
+silhouette_mean_eusq_by_band=[];
+silhouette_mean_city_by_band=[];
 for band = 1:6
-    data=[];
-    for sensor=1:size(sensor_ids)
+    data_by_band=[];
+    for sensor=1:size(sensor_ids,2)
         tmp=getfield(sensors_w_id,char(ids(sensor_ids(sensor))));
-        data=[data, normalize(tmp(:,band))];
+        data_by_band=[data_by_band, normalize(tmp(:,band))];
     end
-%     data=[normalize(t1(:,band)),normalize(t2(:,band)),normalize(t3(:,band)),normalize(t4(:,band))];
-    idx_c=kmeans(data,5,'Distance','cityblock');
-    idx_eusq=kmeans(data,5);
-    clusters_c=[clusters_c,idx_c];
-    clusters_eusq=[clusters_eusq,idx_eusq];
+    idx_c=kmeans(data_by_band,5,'Distance','cityblock');
+    idx_eusq=kmeans(data_by_band,5);
+    clusters_city_by_band=[clusters_city_by_band,idx_c];
+    clusters_eusq_by_band=[clusters_eusq_by_band,idx_eusq];
 %     figure;
-    [sil_c,h]=silhouette(data,idx_c,'cityblock');
+    [sil_c,h]=silhouette(data_by_band,idx_c,'cityblock');
 %     figure;
-    [sil_eusq,h]=silhouette(data,idx_eusq,'sqEuclidean');
-    city_silhouette_mean=[city_silhouette_mean,mean(sil_c)];
-    euclidean_sq_silhouette_mean=[euclidean_sq_silhouette_mean,mean(sil_eusq)];
+    [sil_eusq,h]=silhouette(data_by_band,idx_eusq,'sqEuclidean');
+    silhouette_mean_city_by_band=[silhouette_mean_city_by_band,mean(sil_c)];
+    silhouette_mean_eusq_by_band=[silhouette_mean_eusq_by_band,mean(sil_eusq)];
 end
-clear data idx_c idx_eusq band;
+clear data_by_band idx_c idx_eusq sil_c sil_eusq band tmp h sensor;
+
 
 
 %{
 %%%%%%%% analysis clusters matching rate%%%%%%%%%%%%%%%
 
-TODO: not data seems not good for this
+TODO: data seems not good for this
 Problem: the clustering data is acceptable from the clustering perspective.
 However, most of the time, one or two huge clusters will dominante across
 all 5 categories. I'm still trying to find a visual/numeric ways to
@@ -127,37 +126,124 @@ the closer to zero, means the entries from this categories contains smaller
 clusters, bad clustering. Go through one, means most of the entries from 
 the original categories falls in one large cluster, which is a good result.
 %}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%  analysis by cluster
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%  analysis by cluster
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % [c ia ic]=unique(actions); % get unique value index of actions
 % ia(end+1)=size(actions,1);
 % 
-% clusters_c_match_rates_by_band=[];
+% clusters_city_match_rates_by_band=[];
 % clusters_eusq_match_rates_by_band=[];
-% range_c=unique(actions);
-% range_c=[range_c,range_c,range_c,range_c,range_c,range_c];
-% range_eusq=range_c;
+% range_city=unique(actions);
+% range_city=[range_city,range_city,range_city,range_city,range_city,range_city];
+% range_eusq=range_city;
 % 
 % for idx=2:size(ia)
-%     rate_action_c = [];
+%     rate_action_city = [];
 %     rate_action_eusq = [];
 %     for band=1:6
 %         total=ia(idx)-ia(idx-1);
-%         [M,count_c]=mode_in_range(clusters_c(ia(idx-1):ia(idx)-1,band),range_c(:,band));
-%         range_c(range_c(:,band)==M,band)=range_c(range_c(:,band)==M,band).*-1;
-%         [M,count_eusq]=mode_in_range(clusters_eusq(ia(idx-1):ia(idx)-1,band),range_eusq(:,band));
+%         [M,count_c]=mode_in_range(clusters_c_by_band(ia(idx-1):ia(idx)-1,band),range_city(:,band));
+%         range_city(range_city(:,band)==M,band)=range_city(range_city(:,band)==M,band).*-1;
+%         [M,count_eusq]=mode_in_range(clusters_eusq_by_band(ia(idx-1):ia(idx)-1,band),range_eusq(:,band));
 %         range_eusq(range_eusq(:,band)==M,band)=range_eusq(range_eusq(:,band)==M,band).*-1;
-%         rate_action_c=[rate_action_c,count_c/total]; % rate of every band/action
+%         rate_action_city=[rate_action_city,count_c/total]; % rate of every band/action
 %         rate_action_eusq=[rate_action_eusq,count_eusq/total];
 %     end
-%     clusters_c_match_rates_by_band=[clusters_c_match_rates_by_band;rate_action_c]; % concat rates of every actions(vertical)
+%     clusters_city_match_rates_by_band=[clusters_city_match_rates_by_band;rate_action_city]; % concat rates of every actions(vertical)
 %     clusters_eusq_match_rates_by_band=[clusters_eusq_match_rates_by_band;rate_action_eusq];
 % end
 % clear idx rate_action_c rate_action_eusq c ia ic M h band total count_c count_eusq;
 % 
-% disp('end');
-% 
+
+
+
+%{
+%%%%%%%% Analysis by All bands%%%%%%%%%%%%%%%
+based on the given sensors, analysis each signal bands through clustering
+%}
+% single band, from 1 to 6 is EEG, Alpha, Beta-low, Beta-high, Theta, Gamma
+clusters_city=[];
+clusters_eusq=[];
+silhouette_mean_eusq=[];
+silhouette_mean_city=[];
+data=[];
+
+for sensor=1:size(sensor_ids,2)
+    tmp=getfield(sensors_w_id,char(ids(sensor_ids(sensor))));
+    data=[data, normalize(tmp)];
+end
+idx_c=kmeans(data,5,'Distance','cityblock');
+idx_eusq=kmeans(data,5);
+clusters_city=[clusters_city,idx_c];
+clusters_eusq=[clusters_eusq,idx_eusq];
+%     figure;
+[sil_c,h]=silhouette(data,idx_c,'cityblock');
+%     figure;
+[sil_eusq,h]=silhouette(data,idx_eusq,'sqEuclidean');
+silhouette_mean_city=[silhouette_mean_city,mean(sil_c)];
+silhouette_mean_eusq=[silhouette_mean_eusq,mean(sil_eusq)];
+
+clear data idx_c idx_eusq tmp sil_eusq sil_c sensor h;
+
+
+%{
+%%%%%%%% analysis clusters distribution in each action%%%%%%%%%%%%%%%
+five rows for city, euclidean square, which is relative to the original
+five actions, the whole data set has been clustered to 5 clusters. we can
+see a combinition of cluster frequency rate in each action(from 0~1).
+%}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%  analysis by cluster
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+[c ia ic]=unique(actions); % get unique value index of actions
+ia(end+1)=size(actions,1); % to accomodate the last action
+
+% clusters_city_match_rates=[];
+% clusters_eusq_match_rates=[];
+cluster_dist_count_city=[];
+cluster_dist_freq_city=[];
+cluster_dist_count_eusq=[];
+cluster_dist_freq_eusq=[];
+
+actions_unique=unique(actions);
+
+for idx=2:size(ia)
+%     rate_action_city = [];
+%     rate_action_eusq = [];
+    % build a cluster frequency matrix for each action range
+    range=ia(idx-1):ia(idx)-1;
+    data_in_range = clusters_city(range);
+    [cluster_count_city,cluster_freq_city] = get_count_N_freq(data_in_range,actions_unique);
+    cluster_dist_count_city=[cluster_dist_count_city;cluster_count_city];
+    cluster_dist_freq_city=[cluster_dist_freq_city;cluster_freq_city];
+    
+    data_in_range = clusters_eusq(range);
+    [cluster_count_eusq,cluster_freq_eusq]=get_count_N_freq(data_in_range,actions_unique);
+    cluster_dist_count_eusq=[cluster_dist_count_eusq;cluster_count_eusq];
+    cluster_dist_freq_eusq=[cluster_dist_freq_eusq;cluster_freq_eusq];
+%         total=ia(idx)-ia(idx-1);
+%         [M,count_c]=mode_in_range(clusters_city(ia(idx-1):ia(idx)-1),range_city);
+%         range_city(range_city==M)=range_city(range_city==M).*-1;
+%         [M,count_eusq]=mode_in_range(clusters_eusq_by_band(ia(idx-1):ia(idx)-1,band),range_eusq(:,band));
+%         range_eusq(range_eusq(:,band)==M,band)=range_eusq(range_eusq(:,band)==M,band).*-1;
+%         rate_action_city=[rate_action_city,count_c/total]; % rate of every band/action
+%         rate_action_eusq=[rate_action_eusq,count_eusq/total];
+%     clusters_city_match_rates_by_band=[clusters_city_match_rates_by_band;rate_action_city]; % concat rates of every actions(vertical)
+%     clusters_eusq_match_rates_by_band=[clusters_eusq_match_rates_by_band;rate_action_eusq];
+end
+clear idx range data_in_range cluster_count_city cluster_count_eusq ...
+    cluster_freq_city cluster_freq_eusq;
+
+disp("end");
+
+end
+
+function [count, freq]=get_count_N_freq(data, bins)
+    count = histc(data,bins);
+    freq = count/numel(data);
+    count=count';
+    freq=freq';
 end
 
 function [M,F]=mode_in_range(data,range)

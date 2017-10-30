@@ -1,5 +1,5 @@
 function dataToSend = trainingModule(handles)
-persistent smileData clenchData furrowData browData blinkData nothingData;
+persistent smileData clenchData furrowData browData blinkData relaxData;
 
 timeSlice = 5;
 
@@ -51,7 +51,7 @@ while exist('_trigger','file') == 2
     while (toc<=timeSlice) && (exist('_trigger','file') == 2)
         raw = char(step(hudpr)');
         data = strsplit(raw, ' ');
-%         if (userData ~= 'Nothing')
+%         if (userData ~= 'Relax')
             set(handles.status, 'String', strcat(userData,' now!'));
 %         else 
 %             set(handles.status, 'String', ' Relax! Do nothing!');
@@ -161,22 +161,22 @@ while exist('_trigger','file') == 2
                 dataToSend = blinkData;
                 
             %capture data doing nothing
-            case 'Nothing'
+            case 'Relax'
                 x = size(dataToSave);
-                y = size(nothingData);
+                y = size(relaxData);
                 if (y(1) ~= 0)
                     if (x(1)>y(1))
-                       nothingData = padarray(nothingData, [x(1)-y(1)], 0, 'post'); 
+                       relaxData = padarray(relaxData, [x(1)-y(1)], 0, 'post'); 
                     else
                         if (y(1)>x(1))
                             dataToSave = padarray(dataToSave, [y(1)-x(1)], 0, 'post');
                         end
                     end
                 end
-                nothingData = cat(3, nothingData, dataToSave);
-                dataToSend = nothingData;
+                relaxData = cat(3, relaxData, dataToSave);
+                dataToSend = relaxData;
 
-                size(nothingData)
+                size(relaxData)
         end
     end
 end

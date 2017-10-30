@@ -113,7 +113,7 @@ while (1):
 			print "User added"
 
 	if ready == 1 and readytocollect==True:
-		libEDK.IEE_DataUpdateHandle(0, hData)
+		libEDK.IEE_DataUpdateHandle(userID, hData)
 		libEDK.IEE_DataGetNumberOfSample(hData,nSamplesTaken)
 		if nSamplesTaken[0] != 0:
 			nSam=nSamplesTaken[0]

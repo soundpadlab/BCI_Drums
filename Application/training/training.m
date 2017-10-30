@@ -42,7 +42,7 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
-global smileData clenchData furrowData browData blinkData nothingData;
+global smileData clenchData furrowData browData blinkData relaxData;
 
 % --- Executes just before training is made visible.
 function training_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -104,7 +104,7 @@ function recordSwitch_Callback(hObject, eventdata, handles)
 % hObject    handle to recordSwitch (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global smileData clenchData furrowData browData blinkData nothingData;
+global smileData clenchData furrowData browData blinkData relaxData;
 
 button_state = get(hObject,'String');
 if (strcmp(button_state, 'Start')==1)
@@ -134,7 +134,7 @@ if (strcmp(button_state, 'Start')==1)
         case 6
             userData = 'Relax';
             set (handles.action, 'UserData', userData);
-            nothingData = trainingModule(handles);
+            relaxData = trainingModule(handles);
     end
 else
     delete('_trigger');
@@ -148,7 +148,7 @@ function saveExit_Callback(hObject, eventdata, handles)
 % hObject    handle to saveExit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global smileData clenchData furrowData browData blinkData nothingData;
+global smileData clenchData furrowData browData blinkData relaxData;
 
 % headers = {'Time', 'Alpha', 'Beta_Low', 'Beta_High', 'Theta', 'Gamma'};
 % 
@@ -161,6 +161,7 @@ if ~isempty(smileData)
     filename = strcat('smile-',timeLabel);
     filename = strcat('data/', filename);
     save(filename, 'smileData');
+    set(handles.status, 'String', 'Exported smile');
 end
 
 %clench
@@ -168,6 +169,7 @@ if ~isempty(clenchData)
     filename = strcat('clench-',timeLabel);
     filename = strcat('data/', filename);
     save(filename, 'clenchData');
+    set(handles.status, 'String', 'Exported clench');
 end
 
 %furrow
@@ -175,6 +177,7 @@ if ~isempty(furrowData)
     filename = strcat('furrow-',timeLabel);
     filename = strcat('data/', filename);
     save(filename, 'furrowData');
+    set(handles.status, 'String', 'Exported furrow');
 end
 
 %brow
@@ -182,6 +185,7 @@ if ~isempty(browData)
     filename = strcat('brow-',timeLabel);
     filename = strcat('data/', filename);
     save(filename, 'browData');
+    set(handles.status, 'String', 'Exported brow');
 end
 
 %blink
@@ -189,18 +193,25 @@ if ~isempty(blinkData)
     filename = strcat('blink-',timeLabel);
     filename = strcat('data/', filename);
     save(filename, 'blinkData');
+    set(handles.status, 'String', 'Exported blink');
 end
 
-%nothing
-if ~isempty(nothingData)
-    filename = strcat('nothing-',timeLabel);
+%relax
+if ~isempty(relaxData)
+    filename = strcat('relax-',timeLabel);
     filename = strcat('data/', filename);
-    save(filename, 'nothingData');
+    save(filename, 'relaxData');
+    set(handles.status, 'String', 'Exported relax');
 end
 
-set (handles.status, 'String', 'saved');
+pause on;
+set(handles.status, 'String', 'Exporting data..');
+pause(5);
+pause off;
+
+set (handles.status, 'String', 'exiting, good bye!');
 
 %!killall python
 !taskkill /im cmd.exe
-% quit;
+quit;
 %close(handles);
