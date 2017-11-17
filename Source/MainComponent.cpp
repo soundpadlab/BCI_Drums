@@ -281,8 +281,8 @@ void MainContentComponent::bci_osc()
 		else if (strcmp(buf, "raise-brow") == 0) { action = 6; }
 		else if (strcmp(buf, "clench") == 0) { action = 5; }
 		else if (strcmp(buf, "furrow") == 0) { action = 2; }
-		else if (strcmp(buf, "button1") == 0) { action = 0; }
-		else if (strcmp(buf, "button2") == 0) { action = 1; }
+		else if (strcmp(buf, "left") == 0) { action = 0; }
+		else if (strcmp(buf, "right") == 0) { action = 1; }
 
 		//midiOutput->sendMessageNow(MidiMessage::noteOn(1, action, 1.0f));
 		if (action != -1) {

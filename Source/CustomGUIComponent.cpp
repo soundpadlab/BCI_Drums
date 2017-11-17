@@ -80,7 +80,7 @@ CustomGUIComponent::CustomGUIComponent ()
     comboBox->addListener (this);
 
     addAndMakeVisible (label = new Label ("new label",
-                                          TRANS("Button 1")));
+                                          TRANS("Left Button")));
     label->setFont (Font (15.00f, Font::plain));
     label->setJustificationType (Justification::centredLeft);
     label->setEditable (false, false, false);
@@ -88,7 +88,7 @@ CustomGUIComponent::CustomGUIComponent ()
     label->setColour (TextEditor::backgroundColourId, Colour (0x00000000));
 
     addAndMakeVisible (label2 = new Label ("new label",
-                                           TRANS("Button 2")));
+                                           TRANS("Right Button")));
     label2->setFont (Font (15.00f, Font::plain));
     label2->setJustificationType (Justification::centredLeft);
     label2->setEditable (false, false, false);

@@ -114,27 +114,27 @@ if (strcmp(button_state, 'Start')==1)
         case 1
             userData = 'Smile';
             set (handles.action, 'UserData', userData);
-            smileData = trainingModule(handles);
+            smileData = trainingModule_with_tempo(handles);
         case 2
             userData = 'Clench';
             set (handles.action, 'UserData', userData);
-            clenchData = trainingModule(handles);
+            clenchData = trainingModule_with_tempo(handles);
         case 3
             userData = 'Furrow';
             set (handles.action, 'UserData', userData);
-            furrowData = trainingModule(handles);
+            furrowData = trainingModule_with_tempo(handles);
         case 4
             userData = 'Brow';
             set (handles.action, 'UserData', userData);
-            browData = trainingModule(handles);
+            browData = trainingModule_with_tempo(handles);
         case 5
             userData = 'Blink';
             set (handles.action, 'UserData', userData);
-            blinkData = trainingModule(handles);
+            blinkData = trainingModule_with_tempo(handles);
         case 6
             userData = 'Relax';
             set (handles.action, 'UserData', userData);
-            relaxData = trainingModule(handles);
+            relaxData = trainingModule_with_tempo(handles);
     end
 else
     delete('_trigger');
