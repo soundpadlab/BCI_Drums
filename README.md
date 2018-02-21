@@ -60,30 +60,7 @@ location: BCI_Drums/Application/training/
 6. Check the folder 'training/data/' for all the recordings
 7. You can change the pre-set recording duration by changing the value of variable 'timeSlice' in 'trainingModule.m'
 
-================================================================
+===============================================================
 
-SETUP:
-Software:
-1. MATLAB R2016b+
-2. JUCE
-3. Python 2.7.x
-4. MS Visual Studio 2015+
-5. Studio One Professional
-6. EZDrummer
-7. LoopMIDI
-8. EMOTIV PRO / Xavier Control Panel 
-
-Hardware:
-1. EMOTIV Epoc+
-2. USB Buttons with switcher
-
-Steps:
-1. Open Emotiv PRO / Xavier Control panel
-2. Connect the EMOTIV USB dongle
-3. Turn on the headset and wear it.
-4. Look at the Xavier dashboard to see which sensors are not green, adjust sensor locations on head accordingly.
-5. Once at least 10 are green, you're good to go. Aim for all green.
-6. Connect the USB buttons switch and the buttons.
-7. Open loopMIDI
-8. Open Studio One template
-9. Open demo.bat
+Demo:
+Please follow instructions from README located at Application/Demo
