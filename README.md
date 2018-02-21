@@ -14,8 +14,8 @@ USING UDP/OSC PORTS:
 
 DATA PASSING:
 1. JUCE will accept only following string values:
-"button1"
-"button2"
+"left"
+"right"
 "smile"
 "clench"
 "furrow"
